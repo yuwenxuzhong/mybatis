@@ -1,0 +1,523 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.echo.mybatis.template.mybatistemplate.dao.TemplateTableDao">
+
+    <!-- 可根据自己的需求，是否要使用 -->
+    <resultMap type="com.echo.mybatis.template.mybatistemplate.pojo.TemplateTablePo" id="BaseResultMap">
+        <result property="id" column="id"/>
+        <result property="code" column="code"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="departmentCode" column="department_code"/>
+        <result property="parentDepartmentName" column="parent_department_name"/>
+        <result property="parentDepartmentCode" column="parent_department_code"/>
+        <result property="companyName" column="company_name"/>
+        <result property="departmentAccount" column="department_account"/>
+        <result property="balance" column="balance"/>
+        <result property="unuseAmount" column="unuse_amount"/>
+        <result property="alreadyAmount" column="already_amount"/>
+        <result property="accountType" column="account_type"/>
+        <result property="datasource" column="datasource"/>
+        <result property="status" column="status"/>
+        <result property="remark" column="remark"/>
+        <result property="createUser" column="create_user"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateUser" column="update_user"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="testCode" column="test_code"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, code, department_name, department_code, parent_department_name, parent_department_code, company_name,
+        department_account, balance, unuse_amount, already_amount, account_type, datasource, status, remark,
+        create_user, create_time, update_user, update_time, test_code
+    </sql>
+
+    <!-- 选择性插入 -->
+    <sql id="Base_Insert_Selective">
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="code != null">
+                code,
+            </if>
+            <if test="departmentName != null">
+                department_name,
+            </if>
+            <if test="departmentCode != null">
+                department_code,
+            </if>
+            <if test="parentDepartmentName != null">
+                parent_department_name,
+            </if>
+            <if test="parentDepartmentCode != null">
+                parent_department_code,
+            </if>
+            <if test="companyName != null">
+                company_name,
+            </if>
+            <if test="departmentAccount != null">
+                department_account,
+            </if>
+            <if test="balance != null">
+                balance,
+            </if>
+            <if test="unuseAmount != null">
+                unuse_amount,
+            </if>
+            <if test="alreadyAmount != null">
+                already_amount,
+            </if>
+            <if test="accountType != null">
+                account_type,
+            </if>
+            <if test="datasource != null">
+                datasource,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="testCode != null">
+                test_code
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentName != null">
+                #{departmentName,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentCode != null">
+                #{departmentCode,jdbcType=VARCHAR},
+            </if>
+            <if test="parentDepartmentName != null">
+                #{parentDepartmentName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentDepartmentCode != null">
+                #{parentDepartmentCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentAccount != null">
+                #{departmentAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="unuseAmount != null">
+                #{unuseAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="alreadyAmount != null">
+                #{alreadyAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="accountType != null">
+                #{accountType,jdbcType=VARCHAR},
+            </if>
+            <if test="datasource != null">
+                #{datasource,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=CHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="testCode != null">
+                #{testCode,jdbcType=VARCHAR}
+            </if>
+        </trim>
+    </sql>
+
+    <!-- 基本更新字段 -->
+    <sql id="Base_Update_Column">
+        <set>
+            <if test="id != null">
+                id = #{id,jdbcType=VARCHAR},
+            </if>
+            <if test="code != null">
+                code = #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentName != null">
+                department_name = #{departmentName,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentCode != null">
+                department_code = #{departmentCode,jdbcType=VARCHAR},
+            </if>
+            <if test="parentDepartmentName != null">
+                parent_department_name = #{parentDepartmentName,jdbcType=VARCHAR},
+            </if>
+            <if test="parentDepartmentCode != null">
+                parent_department_code = #{parentDepartmentCode,jdbcType=VARCHAR},
+            </if>
+            <if test="companyName != null">
+                company_name = #{companyName,jdbcType=VARCHAR},
+            </if>
+            <if test="departmentAccount != null">
+                department_account = #{departmentAccount,jdbcType=VARCHAR},
+            </if>
+            <if test="balance != null">
+                balance = #{balance,jdbcType=DECIMAL},
+            </if>
+            <if test="unuseAmount != null">
+                unuse_amount = #{unuseAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="alreadyAmount != null">
+                already_amount = #{alreadyAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="accountType != null">
+                account_type = #{accountType,jdbcType=VARCHAR},
+            </if>
+            <if test="datasource != null">
+                datasource = #{datasource,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=CHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                create_user = #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                update_user = #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="testCode != null">
+                test_code = #{testCode,jdbcType=VARCHAR}
+            </if>
+        </set>
+    </sql>
+
+    <!--
+        Where子句
+      -->
+    <sql id="Base_Query_Where">
+        <if test="id != null">
+            and id = #{id,jdbcType=VARCHAR}
+        </if>
+        <if test="code != null">
+            and code = #{code,jdbcType=VARCHAR}
+        </if>
+        <if test="departmentName != null">
+            and department_name = #{departmentName,jdbcType=VARCHAR}
+        </if>
+        <if test="departmentCode != null">
+            and department_code = #{departmentCode,jdbcType=VARCHAR}
+        </if>
+        <if test="parentDepartmentName != null">
+            and parent_department_name = #{parentDepartmentName,jdbcType=VARCHAR}
+        </if>
+        <if test="parentDepartmentCode != null">
+            and parent_department_code = #{parentDepartmentCode,jdbcType=VARCHAR}
+        </if>
+        <if test="companyName != null">
+            and company_name = #{companyName,jdbcType=VARCHAR}
+        </if>
+        <if test="departmentAccount != null">
+            and department_account = #{departmentAccount,jdbcType=VARCHAR}
+        </if>
+        <if test="balance != null">
+            and balance = #{balance,jdbcType=DECIMAL}
+        </if>
+        <if test="unuseAmount != null">
+            and unuse_amount = #{unuseAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="alreadyAmount != null">
+            and already_amount = #{alreadyAmount,jdbcType=DECIMAL}
+        </if>
+        <if test="accountType != null">
+            and account_type = #{accountType,jdbcType=VARCHAR}
+        </if>
+        <if test="datasource != null">
+            and datasource = #{datasource,jdbcType=CHAR}
+        </if>
+        <if test="status != null">
+            and status = #{status,jdbcType=CHAR}
+        </if>
+        <if test="remark != null">
+            and remark = #{remark,jdbcType=VARCHAR}
+        </if>
+        <if test="createUser != null">
+            and create_user = #{createUser,jdbcType=VARCHAR}
+        </if>
+        <if test="createTime != null">
+            and create_time = #{createTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="updateUser != null">
+            and update_user = #{updateUser,jdbcType=VARCHAR}
+        </if>
+        <if test="updateTime != null">
+            and update_time = #{updateTime,jdbcType=TIMESTAMP}
+        </if>
+        <if test="testCode != null">
+            and test_code = #{testCode,jdbcType=VARCHAR}
+        </if>
+    </sql>
+
+    <select id="getAll" resultMap="BaseResultMap" fetchSize="1000">
+        select
+        <include refid="Base_Column_List"/>
+        from TEMPLATE_TABLE
+    </select>
+
+    <select id="getOne" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from TEMPLATE_TABLE
+        where id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getYesterday" resultMap="BaseResultMap" parameterType="java.lang.String">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        TEMPLATE_TABLE
+        where
+        create_time = #{yesterday ,jdbcType=VARCHAR}
+    </select>
+
+    <select id="getYesterdayDate" resultMap="BaseResultMap" parameterType="java.util.Date">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        TEMPLATE_TABLE
+        where
+        create_time = #{yesterday ,jdbcType=DATE}
+    </select>
+
+    <insert id="insert" parameterType="com.echo.mybatis.template.mybatistemplate.pojo.TemplateTablePo">
+        insert into TEMPLATE_TABLE
+        <include refid="Base_Insert_Selective"/>
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        insert into TEMPLATE_TABLE
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            id, code, department_name, department_code, parent_department_name, parent_department_code, company_name,
+            department_account, balance, unuse_amount, already_amount, account_type, datasource, status, remark,
+            create_user, create_time, update_user, update_time, test_code
+        </trim>
+        values
+        <foreach collection="list" index="index" item="item" separator=",">
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                #{item.id,jdbcType=VARCHAR}, #{item.code,jdbcType=VARCHAR}, #{item.departmentName,jdbcType=VARCHAR},
+                #{item.departmentCode,jdbcType=VARCHAR}, #{item.parentDepartmentName,jdbcType=VARCHAR},
+                #{item.parentDepartmentCode,jdbcType=VARCHAR}, #{item.companyName,jdbcType=VARCHAR},
+                #{item.departmentAccount,jdbcType=VARCHAR}, #{item.balance,jdbcType=DECIMAL},
+                #{item.unuseAmount,jdbcType=DECIMAL}, #{item.alreadyAmount,jdbcType=DECIMAL},
+                #{item.accountType,jdbcType=VARCHAR}, #{item.datasource,jdbcType=CHAR}, #{item.status,jdbcType=CHAR},
+                #{item.remark,jdbcType=VARCHAR}, #{item.createUser,jdbcType=VARCHAR},
+                #{item.createTime,jdbcType=TIMESTAMP}, #{item.updateUser,jdbcType=VARCHAR},
+                #{item.updateTime,jdbcType=TIMESTAMP}, #{item.testCode,jdbcType=VARCHAR}
+            </trim>
+        </foreach>
+    </insert>
+
+    <!-- 根据主键有选择的更新数据库表 -->
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.echo.mybatis.template.mybatistemplate.pojo.TemplateTablePo">
+        update TEMPLATE_TABLE <include refid="Base_Update_Column"/> where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <!-- 根据主键批量更新数据库表中的记录 -->
+    <update id="batchUpdate" parameterType="java.util.List">
+        <foreach close=";" collection="list" index="index" item="item" open="" separator=";">
+            update TEMPLATE_TABLE
+            <set>
+                <if test="item.id != null">
+                    id = #{item.id,jdbcType=VARCHAR},
+                </if>
+                <if test="item.code != null">
+                    code = #{item.code,jdbcType=VARCHAR},
+                </if>
+                <if test="item.departmentName != null">
+                    department_name = #{item.departmentName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.departmentCode != null">
+                    department_code = #{item.departmentCode,jdbcType=VARCHAR},
+                </if>
+                <if test="item.parentDepartmentName != null">
+                    parent_department_name = #{item.parentDepartmentName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.parentDepartmentCode != null">
+                    parent_department_code = #{item.parentDepartmentCode,jdbcType=VARCHAR},
+                </if>
+                <if test="item.companyName != null">
+                    company_name = #{item.companyName,jdbcType=VARCHAR},
+                </if>
+                <if test="item.departmentAccount != null">
+                    department_account = #{item.departmentAccount,jdbcType=VARCHAR},
+                </if>
+                <if test="item.balance != null">
+                    balance = #{item.balance,jdbcType=DECIMAL},
+                </if>
+                <if test="item.unuseAmount != null">
+                    unuse_amount = #{item.unuseAmount,jdbcType=DECIMAL},
+                </if>
+                <if test="item.alreadyAmount != null">
+                    already_amount = #{item.alreadyAmount,jdbcType=DECIMAL},
+                </if>
+                <if test="item.accountType != null">
+                    account_type = #{item.accountType,jdbcType=VARCHAR},
+                </if>
+                <if test="item.datasource != null">
+                    datasource = #{item.datasource,jdbcType=CHAR},
+                </if>
+                <if test="item.status != null">
+                    status = #{item.status,jdbcType=CHAR},
+                </if>
+                <if test="item.remark != null">
+                    remark = #{item.remark,jdbcType=VARCHAR},
+                </if>
+                <if test="item.createUser != null">
+                    create_user = #{item.createUser,jdbcType=VARCHAR},
+                </if>
+                <if test="item.createTime != null">
+                    create_time = #{item.createTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.updateUser != null">
+                    update_user = #{item.updateUser,jdbcType=VARCHAR},
+                </if>
+                <if test="item.updateTime != null">
+                    update_time = #{item.updateTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="item.testCode != null">
+                    test_code = #{item.testCode,jdbcType=VARCHAR}
+                </if>
+            </set>
+            <where>
+                id = #{item.id,jdbcType=VARCHAR}
+            </where>
+        </foreach>
+    </update>
+
+    <select id="getByConditionMap" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select * from TEMPLATE_TABLE
+        <where>
+            1 = 1
+            <include refid="Base_Query_Where"></include>
+        </where>
+    </select>
+
+    <select id="getByConditionListMap" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List"/>
+        from
+        TEMPLATE_TABLE
+        <where>
+            <if test="updateUser != null and updateUser != ''">
+                update_user = #{updateUser,jdbcType=VARCHAR}
+            </if>
+            <if test="datasource != null and datasource != ''">
+                and datasource = #{datasource,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteById">
+        delete from TEMPLATE_TABLE where id = #{id,jdbcType=VARCHAR}
+    </delete>
+
+    <delete id="deleteBatch">
+        delete from TEMPLATE_TABLE where id in
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="getByConditionListMap1" resultMap="BaseResultMap" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator="union">
+            select
+            <include refid="Base_Column_List"/>
+            from
+            TEMPLATE_TABLE
+            <where>
+                <if test="item.updateUser != null and item.updateUser != ''">
+                    update_user = #{item.updateUser,jdbcType=VARCHAR}
+                </if>
+                <if test="item.datasource != null and item.datasource != ''">
+                    and datasource = #{item.datasource,jdbcType=VARCHAR}
+                </if>
+            </where>
+        </foreach>
+    </select>
+
+    <!--<insert  id="insertUser" parameterType="cn.itcast.mybatis.po.User">-->
+        <!--<selectKey resultType="java.lang.String" order="BEFORE"  keyProperty="id">-->
+            <!--select uuid()-->
+        <!--</selectKey>-->
+        <!--insert into user(id,username,birthday,sex,address)  values(#{id},#{username},#{birthday},#{sex},#{address})-->
+    <!--</insert>-->
+
+    <insert id="upsertSelective" parameterType="com.echo.mybatis.template.mybatistemplate.pojo.TemplateTablePo">
+        MERGE  INTO  TEMPLATE_TABLE T1
+        USING (SELECT #{id} as id FROM dual) T2 on (T1.id=T2.id)
+        WHEN MATCHED THEN UPDATE SET
+             T1.id = #{id,jdbcType=VARCHAR},
+             T1.code = #{code,jdbcType=VARCHAR},
+             T1.departmentName = #{departmentName,jdbcType=VARCHAR},
+             T1.departmentCode = #{departmentCode,jdbcType=VARCHAR},
+             T1.parentDepartmentName = #{parentDepartmentName,jdbcType=VARCHAR},
+             T1.parentDepartmentCode = #{parentDepartmentCode,jdbcType=VARCHAR},
+             T1.companyName = #{companyName,jdbcType=VARCHAR},
+             T1.departmentAccount = #{departmentAccount,jdbcType=VARCHAR},
+             T1.balance = #{balance,jdbcType=DECIMAL},
+             T1.unuseAmount = #{unuseAmount,jdbcType=DECIMAL},
+             T1.alreadyAmount = #{alreadyAmount,jdbcType=DECIMAL},
+             T1.accountType = #{accountType,jdbcType=VARCHAR},
+             T1.datasource = #{datasource,jdbcType=VARCHAR},
+             T1.status = #{status,jdbcType=VARCHAR},
+             T1.remark = #{remark,jdbcType=TIMESTAMP},
+             T1.createUser = #{createUser,jdbcType=VARCHAR},
+             T1.createTime = #{createTime,jdbcType=TIMESTAMP},
+             T1.updateUser = #{updateUser,jdbcType=VARCHAR},
+             T1.updateTime = #{updateTime,jdbcType=TIMESTAMP},
+             T1.testCode = #{testCode,jdbcType=VARCHAR}
+        WHEN NOT MATCHED THEN
+        INSERT
+           (T1.id, T1.code, T1.departmentName, T1.departmentCode, T1.parentDepartmentName, T1.parentDepartmentCode, T1.companyName,
+            T1.departmentAccount, T1.balance, T1.unuseAmount, T1.alreadyAmount, T1.accountType, T1.datasource, T1.status, T1.remark,
+            T1.createUser, T1.createTime, T1.updateUser, T1.updateTime, T1.testCode)
+        VALUES
+           (<include refid="Base_Update_Column"/>)
+    </insert>
+</mapper>

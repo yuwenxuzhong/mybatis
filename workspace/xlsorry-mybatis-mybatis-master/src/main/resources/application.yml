@@ -1,0 +1,21 @@
+server:
+  port: 10080
+
+spring:
+  datasource:
+    username: root
+    password: 123456
+    url: jdbc:mysql://192.168.222.132:3306/test?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&allowMultiQueries=true
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+mybatis:
+  # \u914D\u7F6Emapper xml\u6587\u4EF6\u6240\u5728\u7684\u8DEF\u5F84
+  mapper-locations: classpath:mapping/*Mapper.xml
+  # \u914D\u7F6E\u6620\u5C04\u7C7B\u6240\u5728\u7684\u5305\u540D
+  type-aliases-package: com.echo.mybatis.template.mybatistemplate.pojo
+
+# \u8C03\u6574\u65E5\u5FD7\u7EA7\u522B\uFF0C\u8BA9\u6BCF\u6B21\u67E5\u8BE2\u7684sql\u6253\u5370\u51FA\u6765
+logging:
+  level:
+    com.echo.mybatis.template.mybatistemplate.dao: DEBUG

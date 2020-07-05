@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.echo.springmybatis.mapper.SysUserMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512"/>
+
+    <resultMap id="userMap" type="com.echo.springmybatis.model.SysUserPo">
+        <id property="id" column="id"/>
+        <result property="userName" column="user_name"/>
+        <result property="userPassword" column="user_password"/>
+        <result property="userEmail" column="user_email"/>
+        <result property="userInfo" column="user_info"/>
+        <result property="headImg" column="head_img"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+
+        <!-- role 相关属性 -->
+        <!--<result property="sysRolePo.id" column="role_id"/>-->
+        <!--<result property="sysRolePo.roleName" column="role_name"/>-->
+        <!--<result property="sysRolePo.enable" column="enable"/>-->
+        <!--<result property="sysRolePo.createBy" column="create_by"/>-->
+        <!--<result property="sysRolePo.createTime" column="role_create_time"/>-->
+    </resultMap>
+
+    <resultMap id="userRoleMap" extends="userMap" type="com.echo.springmybatis.model.SysUserPo">
+        <association property="sysRolePo" javaType="com.echo.springmybatis.model.SysRolePo">
+            <result property="id" column="id"/>
+            <result property="roleName" column="role_name"/>
+            <result property="enable" column="enable"/>
+            <result property="createBy" column="create_by"/>
+            <result property="createTime" column="create_time"/>
+        </association>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, user_name, user_password, user_email, user_info, head_img, create_time
+    </sql>
+
+    <select id="selectById" resultMap="userMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user where id = #{id}
+    </select>
+
+    <select id="selectAll" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user
+    </select>
+
+    <select id="selectRolesByUserId" resultType="com.echo.springmybatis.model.SysRolePo">
+        select
+          r.id,
+          r.role_name roleName,
+          r.enable,
+          r.create_by createBy,
+          r.create_time createTime
+        from sys_user u
+        inner join sys_user_role ur on u.id = ur.user_id
+        inner join sys_role r on ur.role_id = r.id
+        where u.id = #{userId}
+    </select>
+
+    <select id="selectRolesByUserIdExpand" resultType="com.echo.springmybatis.model.SysRolePo">
+        select
+          r.id,
+          r.role_name roleName,
+          r.enable,
+          r.create_by createBy,
+          r.create_time createTime,
+          u.user_name as "sysUserPo.userName",
+          u.user_email as "sysUserPo.userEmail"
+        from sys_user u
+        inner join sys_user_role ur on u.id = ur.user_id
+        inner join sys_role r on ur.role_id = r.id
+        where u.id = #{userId}
+    </select>
+
+    <!-- parameterType这个属性是可选的，因为MyBatis可以推断出传入语句的具体参数 -->
+    <insert id="insert1">
+        insert into
+          sys_user(id, user_name, user_password, user_email, user_info, head_img, create_time)
+        values
+          (#{id}, #{userName}, #{userPassword}, #{userEmail}, #{userInfo}, #{headImg}, #{createTime})
+    </insert>
+
+    <insert id="insert2" useGeneratedKeys="true" keyProperty="id">
+        insert into
+          sys_user(user_name, user_password, user_email, user_info, head_img, create_time)
+        values
+          (#{userName}, #{userPassword}, #{userEmail}, #{userInfo}, #{headImg}, #{createTime})
+    </insert>
+
+    <insert id="insert3">
+        insert into
+        sys_user(user_name, user_password, user_email, user_info, head_img, create_time)
+        values
+        (#{userName}, #{userPassword}, #{userEmail}, #{userInfo}, #{headImg}, #{createTime})
+        <selectKey keyColumn="id" resultType="long" keyProperty="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
+    <insert id="insert4">
+        <selectKey keyColumn="id" resultType="long" keyProperty="id" order="BEFORE">
+            SELECT SEQ_ID.nextval from dual
+        </selectKey>
+        insert into
+        sys_user(user_name, user_password, user_email, user_info, head_img, create_time)
+        values
+        (#{userName}, #{userPassword}, #{userEmail}, #{userInfo}, #{headImg}, #{createTime})
+    </insert>
+
+    <update id="updateById">
+        update sys_user
+        set
+          user_name = #{userName},
+          user_password = #{userPassword},
+          user_email = #{userEmail},
+          user_info = #{userInfo},
+          head_img = #{headImg},
+          create_time = #{createTime}
+        where
+          id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        delete from sys_user where id = #{id}
+    </delete>
+
+    <select id="selectRolesByUserIdAndRoleEnable" resultType="com.echo.springmybatis.model.SysRolePo">
+        select
+          r.id,
+          r.role_name roleName,
+          r.enable,
+          r.create_by createBy,
+          r.create_time createTime
+        from sys_user u
+        inner join sys_user_role ur on u.id = ur.user_id
+        inner join sys_role r on ur.role_id = r.id
+        where u.id = #{userId} and r.enable = #{enable}
+    </select>
+
+    <select id="selectByUser" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+        id, user_name userName, user_password userPassword, user_email userEmail,
+        user_info userInfo, head_img headImg, create_time createTime
+        from sys_user
+        where 1 = 1
+        <if test="userName != null and userName != ''">
+            and user_name like concat('%', #{userName}, '%')
+        </if>
+        <if test="userEmail != null and userEmail != ''">
+            and user_email = #{userEmail}
+        </if>
+    </select>
+
+    <update id="updateByIdSelective">
+        update sys_user
+        set
+        <if test="userName != null and userName != ''">
+            user_name = #{userName},
+        </if>
+        <if test="userPassword != null and userPassword != ''">
+            user_password = #{userPassword},
+        </if>
+        <if test="userEmail != null and userEmail != ''">
+            user_email = #{userEmail},
+        </if>
+        <if test="userInfo != null and userInfo != ''">
+            user_info = #{userInfo},
+        </if>
+        <if test="headImg != null and headImg != ''">
+            head_img = #{headImg},
+        </if>
+        <if test="createTime != null and createTime != ''">
+            create_time = #{createTime},
+        </if>
+        id = #{id}
+        where id = #{id}
+    </update>
+
+    <insert id="insert5" useGeneratedKeys="true" keyProperty="id">
+        insert into
+        sys_user(user_name, user_password,
+        <if test="userEmail != null and userEmail != ''">
+            user_email,
+        </if>
+        user_info, head_img, create_time)
+        values
+        (#{userName}, #{userPassword},
+        <if test="userEmail != null and userEmail != ''">
+            #{userEmail},
+        </if>
+        #{userInfo}, #{headImg}, #{createTime})
+    </insert>
+
+    <select id="selectByIdOrUserName" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+        id, user_name userName, user_password userPassword,
+        user_email userEmail, user_info userInfo, head_img headImg,
+        create_time createTime
+        from sys_user
+        where 1 = 1
+        <choose>
+            <when test="id != null">
+                and id = #{id}
+            </when>
+            <when test="userName != null and userName !=''">
+                and user_name = #{userName}
+            </when>
+            <otherwise>
+                and 1 = 2
+            </otherwise>
+        </choose>
+    </select>
+
+    <select id="selectByUser2" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+        id, user_name userName, user_password userPassword,
+        user_email userEmail, user_info userInfo, head_img headImg,
+        create_time createTime
+        from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                and user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="userEmail !='' and userEmail != null">
+                and user_email = #{userEmail}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByUser3" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+        id, user_name userName, user_password userPassword,
+        user_email userEmail, user_info userInfo, head_img headImg,
+        create_time createTime
+        from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                <bind name="userName" value="'%' + userName + '%'"/>
+                and user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="userEmail !='' and userEmail != null">
+                and user_email = #{userEmail}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateByIdSelective2">
+        update sys_user
+        <set>
+            <if test="userName != null and userName != ''">
+                user_name = #{userName},
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                user_password = #{userPassword},
+            </if>
+            <if test="userEmail != null and userEmail != ''">
+                user_email = #{userEmail},
+            </if>
+            <if test="userInfo != null and userInfo != ''">
+                user_info = #{userInfo},
+            </if>
+            <if test="headImg != null and headImg != ''">
+                head_img = #{headImg},
+            </if>
+            <if test="createTime != null and createTime != ''">
+                create_time = #{createTime},
+            </if>
+            id = #{id},
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="selectByIdList" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+            id, user_name userName, user_password userPassword, user_email userEmail,
+            user_info userInfo, head_img headImg, create_time createTime
+        from sys_user
+        where id in
+        <foreach collection="list" open="(" close=")" separator="," item="id" index="i">
+            #{id}
+        </foreach>
+    </select>
+
+    <insert id="insertList" useGeneratedKeys="true" keyProperty="id">
+        insert into
+          sys_user(user_name, user_password, user_email, user_info, head_img, create_time)
+        values
+        <foreach collection="list" item="user" separator=",">
+            (#{user.userName}, #{user.userPassword}, #{user.userEmail},
+            #{user.userInfo}, #{user.headImg}, #{user.createTime})
+        </foreach>
+    </insert>
+
+    <update id="updateByMap">
+        update sys_user
+        set
+        <foreach collection="_parameter" item="val" index="key" separator=",">
+            ${key} = #{val}
+        </foreach>
+        where id = #{id}
+    </update>
+
+    <select id="selectByUserToMySQL" resultType="com.echo.springmybatis.model.SysUserPo" databaseId="mysql">
+        select
+        id, user_name userName, user_password userPassword,
+        user_email userEmail, user_info userInfo, head_img headImg,
+        create_time createTime
+        from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                <bind name="userName" value="'%' + userName + '%'"/>
+                and user_name like concat('%', #{userName}, '%')
+            </if>
+            <if test="userEmail !='' and userEmail != null">
+                and user_email = #{userEmail}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByUserToOracle" resultType="com.echo.springmybatis.model.SysUserPo" databaseId="oracle">
+        select
+        id, user_name userName, user_password userPassword,
+        user_email userEmail, user_info userInfo, head_img headImg,
+        create_time createTime
+        from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                and user_name like '%'||#{userName}||'%')
+            </if>
+            <if test="userEmail !='' and userEmail != null">
+                and user_email = #{userEmail}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectByUserToDatabase" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+        id, user_name userName, user_password userPassword,
+        user_email userEmail, user_info userInfo, head_img headImg,
+        create_time createTime
+        from sys_user
+        <where>
+            <if test="userName != null and userName != ''">
+                <if test="_databaseId == 'oracle'">
+                  and user_name like '%'||#{userName}||'%')
+                </if>
+                <if test="_databaseId == 'mysql'">
+                  and user_name like conat('%', #{userName}, '%')
+                </if>
+            </if>
+            <if test="userEmail !='' and userEmail != null">
+                and user_email = #{userEmail}
+            </if>
+        </where>
+    </select>
+
+    <select id="selectUserAndRoleById" resultType="com.echo.springmybatis.model.SysUserPo">
+        select
+          u.id,
+          u.user_name userName,
+          u.user_password userPassword,
+          u.user_email userEmail,
+          u.user_info userInfo,
+          u.head_img headImg,
+          u.create_time createTime,
+          r.id "sysRolePo.id",
+          r.role_name "sysRolePo.roleName",
+          r.enable "sysRolePo.enable",
+          r.create_by "sysRolePo.createBy",
+          r.create_time "sysRolePo.createTime"
+        from sys_user u
+        inner join sys_user_role ur on u.id = ur.user_id
+        inner join sys_role r on ur.role_id = r.id
+        where u.id = #{id}
+    </select>
+
+    <select id="selectUserAndRoleById2" resultMap="userMap">
+        select
+          u.id,
+          u.user_name,
+          u.user_password,
+          u.user_email,
+          u.user_info,
+          u.head_img,
+          u.create_time,
+          r.id role_id,
+          r.role_name,
+          r.enable enable,
+          r.create_by create_by,
+          r.create_time role_create_time
+        from sys_user u
+        inner join sys_user_role ur on u.id = ur.user_id
+        inner join sys_role r on ur.role_id = r.id
+        where u.id = #{id}
+    </select>
+
+    <select id="selectUserAndRoleById3" resultMap="userRoleMap">
+        select
+          u.id,
+          u.user_name,
+          u.user_password,
+          u.user_email,
+          u.user_info,
+          u.head_img,
+          u.create_time,
+          r.id role_id,
+          r.role_name,
+          r.enable enable,
+          r.create_by create_by,
+          r.create_time role_create_time
+        from sys_user u
+        inner join sys_user_role ur on u.id = ur.user_id
+        inner join sys_role r on ur.role_id = r.id
+        where u.id = #{id}
+    </select>
+</mapper>
